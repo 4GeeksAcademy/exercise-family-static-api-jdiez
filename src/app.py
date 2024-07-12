@@ -25,6 +25,56 @@ def handle_invalid_usage(error):
 def sitemap():
     return generate_sitemap(app)
 
+
+
+Michael = {
+    "first_name": "Michael",
+    "age" : 30,
+    "lucky_numbers": [2,4,8]
+}
+
+John = {
+    "first_name": "John",
+    "age" : 20,
+    "lucky_numbers": [12,44,58]
+}
+
+Peter = {
+    "first_name": "Peter",
+    "age" : 25,
+    "lucky_numbers": [10,20,30]
+}
+
+jackson_family.add_member(Michael)
+jackson_family.add_member(John)
+jackson_family.add_member(Peter)
+
+
+@app.route('/members', methods=['POST'])
+def new_member():
+    new_member = request.json
+    member = jackson_family.add_member(new_member)
+    if(member):
+        return jsonify({"Mensaje": "Se añadió el miembro con éxito"}), 200
+    return jsonify({"Mensaje": "Error al añadir el miembro"}), 400
+
+@app.route('/members/<int:id>', methods=['GET'])
+def get_one_member(id):
+    member = jackson_family.get_member(id)
+    response_body = {
+        "Miembro seleccionado": member
+    }
+    return jsonify(response_body), 200
+
+
+@app.route('/members/<int:id>', methods=['DELETE'])
+def delete_one_member(id):
+    member = jackson_family.delete_member(id)
+    response_body = {
+        "Miembro eliminado": member
+    }
+    return jsonify(response_body), 200
+
 @app.route('/members', methods=['GET'])
 def handle_hello():
 
